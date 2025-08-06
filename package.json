@@ -1,29 +1,18 @@
 {
-    "name": "ekko-redis-stream-server",
+    "name": "redis-stream-server",
     "version": "1.0.0",
-    "description": "Redis WebSocket bridge for EKKO token feeds",
+    "description": "Redis Stream Server for EKKO Token Feed - Render.com deployment",
     "main": "server.js",
     "scripts": {
         "start": "node server.js",
-        "dev": "node server.js",
-        "test": "node server.js"
+        "dev": "node server.js"
     },
     "dependencies": {
-        "ws": "^8.14.2",
-        "ioredis": "^5.3.2",
         "express": "^4.18.2",
-        "cors": "^2.8.5"
+        "cors": "^2.8.5",
+        "redis": "^4.6.0"
     },
     "engines": {
-        "node": "18.x"
-    },
-    "keywords": [
-        "redis",
-        "websocket",
-        "solana",
-        "tokens",
-        "real-time"
-    ],
-    "author": "EKKO Platform",
-    "license": "MIT"
+        "node": ">=18.0.0"
+    }
 }
