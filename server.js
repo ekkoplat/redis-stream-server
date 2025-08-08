@@ -20,9 +20,22 @@ app.use(express.json());
 let client = null;
 let subscriber = null;
 
-// EXACT same Redis configs as your working local server - but prioritize the one that has data
+// EXACT same Redis configs as pumpfun-all.js - UPDATED TO MATCH
 const REDIS_CONFIGS = [
-    // Option 1: Redis Cloud Public (where pumpfun-all.js was publishing before)
+    // Option 1: Upstash Redis (Production) - SAME AS PUMPFUN-ALL.JS
+    {
+        name: 'Upstash Redis (Production)',
+        config: {
+            username: 'default',
+            password: 'AXg0AAIjcDE4NjQ4NzliODg2OGI0ZGMxOWY0NTFkMjE5NGYyZTU4NnAxMA',
+            socket: {
+                host: 'polite-albacore-32075.upstash.io',
+                port: 6379,
+                tls: true
+            }
+        }
+    },
+    // Option 2: Public Redis Cloud endpoint (backup)
     {
         name: 'Redis Cloud Public',
         config: {
@@ -34,20 +47,7 @@ const REDIS_CONFIGS = [
             }
         }
     },
-    // Option 2: Upstash Redis (backup)
-    {
-        name: 'Upstash Redis (Production)',
-        config: {
-            username: 'default',
-            password: 'AXg0AAIjcDE4NjQ4NzliODg2OGI0ZGMxOWY0NTFkMjE5NGYyZTU4NnAxMA',
-            socket: {
-                host: 'primary-labrador-30772.upstash.io',
-                port: 6379,
-                tls: true
-            }
-        }
-    },
-    // Option 3: Redis Cloud Alt Format
+    // Option 3: Alternative hostname format
     {
         name: 'Redis Cloud Alt Format',
         config: {
@@ -56,6 +56,43 @@ const REDIS_CONFIGS = [
             socket: {
                 host: 'c43162-redis-12423.us-east-1-mz.ec2.cloud.rlrcp.com',
                 port: 12423
+            }
+        }
+    },
+    // Option 4: With TLS
+    {
+        name: 'Redis Cloud TLS',
+        config: {
+            username: 'default',
+            password: 'Hakoff11!',
+            socket: {
+                host: 'redis-12423.c43162.us-east-1-mz.ec2.cloud.rlrcp.com',
+                port: 12423,
+                tls: true
+            }
+        }
+    },
+    // Option 5: Local Redis fallback
+    {
+        name: 'Local Redis',
+        config: {
+            socket: {
+                host: 'localhost',
+                port: 6379,
+                connectTimeout: 3000,
+                commandTimeout: 2000,
+            }
+        }
+    },
+    // Option 6: Docker Redis fallback
+    {
+        name: 'Docker Redis',
+        config: {
+            socket: {
+                host: '127.0.0.1',
+                port: 6379,
+                connectTimeout: 3000,
+                commandTimeout: 2000,
             }
         }
     }
