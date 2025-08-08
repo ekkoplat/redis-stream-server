@@ -20,6 +20,7 @@ app.use(express.json());
 let client = null;
 let subscriber = null;
 
+
 // EXACT same Redis configs as pumpfun-all.js - UPDATED TO MATCH
 const REDIS_CONFIGS = [
     // Option 1: Upstash Redis (Production) - SAME AS PUMPFUN-ALL.JS
