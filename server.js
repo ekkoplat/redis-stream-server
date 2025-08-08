@@ -20,6 +20,23 @@ app.use(express.json());
 let client = null;
 let subscriber = null;
 
+// Helper function to scan keys instead of using KEYS command
+async function scanKeys(client, pattern) {
+    const keys = [];
+    let cursor = 0;
+    
+    do {
+        const result = await client.scan(cursor, {
+            MATCH: pattern,
+            COUNT: 100
+        });
+        cursor = result.cursor;
+        keys.push(...result.keys);
+    } while (cursor !== 0);
+    
+    return keys;
+}
+
 
 // EXACT same Redis configs as pumpfun-all.js - UPDATED TO MATCH
 const REDIS_CONFIGS = [
@@ -119,7 +136,7 @@ async function connectRedis() {
             await client.configSet('notify-keyspace-events', 'KEA');
 
             // Test if this Redis instance has token data
-            const tokenKeys = await client.keys('token/*');
+            const tokenKeys = await scanKeys(client, 'token/*');
             console.log(`📊 Found ${tokenKeys.length} tokens in ${configOption.name}`);
 
             console.log(`✅ Redis connected (${configOption.name})`);
@@ -158,8 +175,8 @@ app.get('/status', async (req, res) => {
             });
         }
 
-        const tokenKeys = await client.keys('token/*');
-        const txKeys = await client.keys('transaction/*');
+        const tokenKeys = await scanKeys(client, 'token/*');
+        const txKeys = await scanKeys(client, 'transaction/*');
 
         res.json({
             connected: true,
@@ -187,8 +204,8 @@ app.get('/api/redis/status', async (req, res) => {
             });
         }
 
-        const tokenKeys = await client.keys('token/*');
-        const txKeys = await client.keys('transaction/*');
+        const tokenKeys = await scanKeys(client, 'token/*');
+        const txKeys = await scanKeys(client, 'transaction/*');
 
         res.json({
             connected: true,
@@ -241,7 +258,7 @@ app.get('/get-latest-30', async (req, res) => {
         console.log(`🚀 Getting latest 30 tokens using optimized approach`);
 
         // Get ALL token keys at once
-        const tokenKeys = await client.keys('token/*');
+        const tokenKeys = await scanKeys(client, 'token/*');
         console.log(`📊 Found ${tokenKeys.length} total tokens`);
 
         if (tokenKeys.length === 0) {
@@ -457,8 +474,8 @@ async function startServer() {
         console.error('❌ Failed to connect to Redis - server will start but return empty data');
     } else {
         // Check existing data
-        const tokenKeys = await client.keys('token/*');
-        const txKeys = await client.keys('transaction/*');
+        const tokenKeys = await scanKeys(client, 'token/*');
+        const txKeys = await scanKeys(client, 'transaction/*');
         console.log(`📊 Found ${tokenKeys.length} tokens and ${txKeys.length} transactions in Redis`);
     }
 
