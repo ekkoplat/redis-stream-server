@@ -27,7 +27,7 @@ const REDIS_CONFIGS = [
         name: 'Upstash Redis (Production)',
         config: {
             username: 'default',
-            password: 'AXg0AAIjcDE4NjQ4NzliODg2OGI0ZGMxOWY0NTFkMjE5NGYyZTU4NnAxMA',
+            password: 'AX1LAAIjcDEyMWI5ZmY3MGJiYWE0NTY0YmZjMjM2MGU3MmY5MTY5Y3AxMA',
             socket: {
                 host: 'polite-albacore-32075.upstash.io',
                 port: 6379,
